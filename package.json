@@ -1,6 +1,6 @@
 {
   "name": "roas",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A Web App like Ruby on Rails with Koa2, ES6 and Sequelize.",
   "main": "index.js",
   "scripts": {
