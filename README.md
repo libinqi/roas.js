@@ -10,7 +10,6 @@ This project is like Ruby on Rails Project:
 * Testing (mocha)
 * Lint (eslint)
 * middleware
-* console
 * rest server side
 
 ## Requirements
@@ -24,8 +23,8 @@ This project is like Ruby on Rails Project:
  install nodejs
  install mysql and mssql
  create database:
- for development { database: 'roas_dev', owner: 'roas_dev', password: 'roas_dev' }
- for test { database: 'roas_test', owner: 'roas_test', password: 'roas_test' }
+ for development { database: 'roas_dev', username: 'roas_dev', password: 'roas_dev' }
+ for test { database: 'roas_test', username: 'roas_test', password: 'roas_test' }
  clone this project
 ```
 
@@ -70,6 +69,12 @@ This project is like Ruby on Rails Project:
 ├─ public
 ├─ log
 └─ test
+	├─ controllers
+	├─ middlewares
+	├─ models
+	├─ services
+	├─ bootstrap.test.js
+	└─ mocha.opts
 ```
 
 ## Usage
