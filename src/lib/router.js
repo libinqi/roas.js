@@ -9,7 +9,7 @@ export default function () {
 
     for (let mapping in global.$routes) {
         for (let url in global.$routes[mapping]) {
-            path = url.substring(4);
+            path = url.substr(url.indexOf('/'),url.length-1);
             params = global.$routes[mapping][url].split('.');
 
             // 获取控制器与函数
