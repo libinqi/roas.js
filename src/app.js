@@ -2,6 +2,7 @@ import Koa from 'koa';
 import convert from 'koa-convert';
 import json from 'koa-json';
 import bodyparser from 'koa-bodyparser';
+import cors from 'koa-cors';
 import logger from 'koa-logger';
 import config from './config/config';
 import {
@@ -29,7 +30,7 @@ if (config.env == 'development') {
 
 app.use(convert(json()));
 app.use(convert(bodyparser()));
-
+app.use(cors());
 app.use(cacheMiddle());
 
 app.use(restql.routes());
