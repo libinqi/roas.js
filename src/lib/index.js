@@ -36,11 +36,12 @@ const router = Router();
  *param:dir(实体文件目录,默认路径为当前项目src/api/models)
  *param:schema
  */
-const orm = ORM();
+const orm = ORM([path.join(__dirname, '../', 'api/models')]);
+// const orm = ORM([path.join(__dirname, '../', 'api/models'),amber.models_path]);
 
 module.exports = {
     router: router,
     orm: orm
-}
+};
 
 
