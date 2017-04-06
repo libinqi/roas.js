@@ -37,7 +37,8 @@ const router = Router();
  *param:schema
  */
 const orm = ORM([path.join(__dirname, '../', 'api/models')]);
-// const orm = ORM([path.join(__dirname, '../', 'api/models'),amber.models_path]);
+// orm.dynamicLoadModels(amber.models_path);
+
 
 module.exports = {
     router: router,

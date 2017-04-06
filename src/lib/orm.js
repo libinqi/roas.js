@@ -18,6 +18,7 @@ if (config.use_env_variable) {
 		logging: debug,
 		underscored: true,
 		underscoredAll: true,
+		isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED,
 		define: {
 			paranoid: true,
 			underscored: true,
@@ -92,18 +93,18 @@ export default function (dir, schema = '') {
 	};
 
 	const dynamicLoadModels = (modelsPath, schema) => {
-		if(typeof(modelsPath) === 'object'){
-			for(let path of modelsPath){
+		if (typeof (modelsPath) === 'object') {
+			for (let path of modelsPath) {
 				loadModels(path, schema);
 			}
-		}else {
+		} else {
 			loadModels(modelsPath, schema);
 		}
 
 		associateModels();
 	};
 	db.dynamicLoadModels = dynamicLoadModels;
-	
+
 	dynamicLoadModels(models_path, schema);
 
 	db.sequelize = sequelize;

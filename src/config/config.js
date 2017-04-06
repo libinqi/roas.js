@@ -2,6 +2,7 @@ import _ from 'lodash';
 import development from './env/development';
 import test from './env/test';
 import production from './env/production';
+import path from 'path';
 
 const env = process.env.NODE_ENV || 'development';
 const configs = {
@@ -10,7 +11,8 @@ const configs = {
   production: production
 };
 const defaultConfig = {
-  env: env
+  env: env,
+  appPath: path.join(__dirname, '../')
 };
 
 var config = _.merge(defaultConfig, configs[env]);
