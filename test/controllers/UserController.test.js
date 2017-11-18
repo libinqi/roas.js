@@ -1,5 +1,5 @@
 describe('Users Routes', () => {
-  describe('GET /users/list', () => {
+  describe('GET /getUserList', () => {
     it('should return 200', (done) => {
       request
         .get('/users/list')

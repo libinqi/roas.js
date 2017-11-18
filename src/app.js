@@ -20,11 +20,10 @@ app.keys = [config.secretKeyBase];
 
 // not serve static when deploy
 if (config.serveStatic) {
-	app.use(convert(require('koa-static')(__dirname + '/public')));
+	app.use(convert(require('koa-static')(path.join(process.cwd(),'/public'))));
 }
-
 app.use(xload(app, {
-	path: path.resolve(__dirname, './public/assets/images/avatar'),
+	path: path.join(process.cwd(), '/public/assets/images/avatar'),
 	upload: {
 		encoding: 'utf-8',
 		maxFieldsSize: 2 * 1024 * 1024,

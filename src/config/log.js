@@ -1,44 +1,41 @@
 /**
- * Created by wp on 2017-03-13.
+ * Created by libinqi on 2017-03-13.
  */
 import path from "path";
 import appConfig from "./config";
 
-const log_path = path.join(__dirname, '../../logs');  //配置目标路径 logs
+const log_path = path.join(process.cwd(), '/logs'); //配置目标路径 logs
 const config = {
-    appenders: [
-        {
-            type: "file",
-            filename: "app.log",
-            maxLogSize: 10485760,
-            pattern: "-yyyy-MM-dd",
-            numBackups: 5,
-            category: "app"
+    appenders: {
+        out: {
+            type: "console"
         },
-        {
+        debug: {
             type: "file",
-            filename: "debug.log",
+            filename: log_path + "/out.log",
             maxLogSize: 10485760,
             pattern: "-yyyy-MM-dd",
-            numBackups: 5,
-            category: "debug"
+            numBackups: 5
         },
-        {
+        error: {
             type: "file",
-            filename: "errors.log",
+            filename: log_path + "/error.log",
             maxLogSize: 10485760,
             pattern: "-yyyy-MM-dd",
-            numBackups: 5,
-            category: "error"
+            numBackups: 5
         }
-    ]
+    },
+    categories: {
+        default: {
+            appenders: ['error'],
+            level: 'error'
+        }
+    }
 };
 
 if (appConfig.env === "development") {
-    config.appenders.push({
-        type: "console"
-    })
+    config.categories.default.appenders = ['out', 'debug'];
+    config.categories.default.level = 'debug';
 }
 
-module.exports = {path: log_path, config};
-
+module.exports = config;

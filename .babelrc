@@ -1,8 +1,6 @@
 {
-    "presets": [
-        "es2017-node7"
-    ],
+    "presets": ["es2017-node7"],
     "minified": true,
-	"compact": true,
-	"comments": false
+    "compact": true,
+    "comments": false
 }

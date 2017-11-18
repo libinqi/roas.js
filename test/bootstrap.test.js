@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'test';
 
-import app from '../../src/app.js';
+import app from '../src/app.js';
 import supertest from 'supertest';
 
 const request = supertest.agent(app.listen());

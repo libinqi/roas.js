@@ -1,3 +1,4 @@
 module.exports = {
-    'GET /users/list': "UserController.list",
+    'GET /getUserList': "UserController.list",
+    'GET /getUser': "UserController.getUser",
 }

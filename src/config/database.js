@@ -3,7 +3,7 @@ module.exports = {
         username: process.env.DATABASE_USERNAME_DEV || 'root',
         password: process.env.DATABASE_PASSWORD_DEV || '123456',
         database: process.env.DATABASE_NAME_DEV || 'roas_dev',
-        host: process.env.DATABASE_HOST_DEV || '127.0.0.1',
+        host: process.env.DATABASE_HOST_DEV || 'localhost',
         dialect: 'mysql',
         pool: {
             max: 5,
@@ -15,7 +15,7 @@ module.exports = {
         username: process.env.DATABASE_USERNAME_TEST || 'root',
         password: process.env.DATABASE_PASSWORD_TEST || '123456',
         database: process.env.DATABASE_NAME_TEST || 'roas_test',
-        host: process.env.DATABASE_HOST_TEST || '127.0.0.1',
+        host: process.env.DATABASE_HOST_TEST || 'localhost',
         dialect: 'mysql',
         pool: {
             max: 5,

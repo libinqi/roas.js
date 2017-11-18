@@ -1,4 +1,9 @@
-import {expect} from 'chai';
+import {
+    expect
+} from 'chai';
+import {
+    UserService
+} from '../../src/api/services';
 
 describe('User Service', () => {
     describe('GET', () => {
@@ -10,10 +15,9 @@ describe('User Service', () => {
                 expect(user.nickname).to.equal('roas.js');
 
                 const userService = new UserService();
-                user = await userService.getUser(1);
+                user = await userService.getUser(user.id);
                 expect(user.nickname).to.equal('roas.js');
             });
         });
     });
 });
-

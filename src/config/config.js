@@ -12,7 +12,7 @@ const configs = {
 };
 const defaultConfig = {
   env: env,
-  appPath: path.join(__dirname, '../')
+  appPath: process.cwd()
 };
 
 var config = _.merge(defaultConfig, configs[env]);

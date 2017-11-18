@@ -4,10 +4,10 @@ describe('User Model', () => {
     describe('Create', () => {
         it('should create user success', () => {
             return User.create({
-                name: 'amber',
-                nickname: 'Amber',
+                name: 'roas',
+                nickname: 'roas.js',
             }).then((user) => {
-                expect(user.nickname).to.equal('Amber');
+                expect(user.nickname).to.equal('roas.js');
             });
         });
     });
