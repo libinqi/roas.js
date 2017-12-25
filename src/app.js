@@ -73,12 +73,12 @@ if (process.argv[2] && process.argv[2][0] == 'c') {
 		if (connection) {
 			console.log('Connected to the database');
 
-			if (config.http) {
+			if (config.http && config.http.isEnable) {
 				app.listen(config.http.port, () => {
 					console.log('http server listener port:' + config.http.port);
 				});
 			}
-			if (config.ws) {
+			if (config.ws && config.ws.isEnable) {
 				const wsServer = http.createServer(app.callback());
 				wsServer.listen(config.ws.wsPort, 'localhost', () => {
 					console.log('web socket server listener port:' + config.ws.wsPort);
@@ -88,7 +88,7 @@ if (process.argv[2] && process.argv[2][0] == 'c') {
 					router(ctx, next);
 				});
 			}
-			if (config.tcp && config.tcp.provider) {
+			if (config.tcp && config.tcp.isEnable && config.tcp.provider) {
 				const socketServer = Net.createServer((socket) => {
 					socket.on('data', async(data) => {
 						let parser = require("./api/parsers/" + config.tcp.provider);
