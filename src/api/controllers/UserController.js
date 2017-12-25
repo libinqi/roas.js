@@ -18,3 +18,13 @@ export async function getUser(ctx, next) {
     }
     ctx.body = await new UserService().getUser(userId);
 }
+
+export async function getUserForWS(ctx, next) {
+    console.info(ctx.data);
+    let userId = ctx.data.userId;
+    if (!userId) {
+        ctx.throw(errors.CustomErrors.NotUserId);
+    }
+    let result = await new UserService().getUser(userId);
+    ctx.socket.emit('data', result);
+}

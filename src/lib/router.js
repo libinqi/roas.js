@@ -4,14 +4,13 @@ import Router from 'koa-router';
 
 const router = Router();
 
-export default function () {
+export default function (ctx, next) {
     let path, params, controller, action;
 
     for (let mapping in global.$routes) {
         for (let url in global.$routes[mapping]) {
-            path = url.substr(url.indexOf('/'),url.length-1);
+            path = url.substr(url.indexOf('/'), url.length - 1);
             params = global.$routes[mapping][url].split('.');
-
             // 获取控制器与函数
             if (params && params.length == 2) {
                 controller = global.$controllers[params[0]];
@@ -37,8 +36,10 @@ export default function () {
                 router.put(path, action);
             } else if (url.startsWith('DELETE ') || url.startsWith('delete ')) {
                 router.delete(path, action);
-            }
-            else {
+            } else if (url.startsWith('WS') || url.startsWith('ws')) {
+                path = url.replace('WS ', '').replace('ws ', '');
+                if (ctx)ctx.socket.on(path, action);
+            } else {
                 console.log(`Don't support routing：${url}`);
             }
         }

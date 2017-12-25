@@ -47,7 +47,7 @@ export default function (dir, schema = '') {
 
 			// load model recursively
 			if (isDirectory) {
-				loadModels(modelPath, filename);
+				loadModels(modelPath, '');
 			} else {
 				let model = require(modelPath),
 					name = filename.match(validNameRegex)[1];

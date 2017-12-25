@@ -1,6 +1,6 @@
 {
   "name": "roas",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A Web App like Ruby on Rails with Koa2, ES6 and Sequelize.",
   "main": "index.js",
   "scripts": {
@@ -48,6 +48,7 @@
     "koa-jwt": "^3.2.2",
     "koa-multer": "^1.0.2",
     "koa-router": "^7.3.0",
+    "koa-socket.io": "^1.1.2",
     "koa-static": "^4.0.2",
     "lodash": "^4.17.4",
     "log4js": "^2.3.12",
