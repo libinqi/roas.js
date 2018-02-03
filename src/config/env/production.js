@@ -11,16 +11,16 @@ module.exports = {
     maxCache: process.env.MAX_CACHE_PRO || 3600,
     maxCache: 3600,
     secretKeyBase: process.env.SECRET_KEY_BASE,
-    isEnable: process.env.HTTP_ENABLE || true,
+    isEnable: (process.env.HTTP_ENABLE == true || process.env.HTTP_ENABLE == 'true') ? true : false,
     provider: process.env.HTTP_PROVIDER,
   },
   ws: {
     wsPort: ws_port,
-    isEnable: process.env.WS_ENABLE || false
+    isEnable: (process.env.WS_ENABLE == true || process.env.WS_ENABLE == 'true') ? true : false
   },
   tcp: {
     port: tcp_port,
-    isEnable: process.env.TCP_ENABLE || false,
+    isEnable: (process.env.TCP_ENABLE == true || process.env.TCP_ENABLE == 'true') ? true : false,
     provider: process.env.TCP_PROVIDER
   }
 };
