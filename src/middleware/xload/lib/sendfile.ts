@@ -22,7 +22,7 @@ export default function (ctx, filename, config) {
   }
 
   if (!hashContent || !hashContent[filename]) {
-    return function () { }
+    return function () { };
   }
 
   let filePath = hashContent[filename].path;

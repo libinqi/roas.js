@@ -1,6 +1,3 @@
-/**
- * Created by libinqi on 2016/11/15.
- */
 import * as errors from '../../config/errors';
 import { logger } from '../../middleware/log';
 import { UserService } from '../services';
@@ -8,7 +5,7 @@ import { UserAttributes, UserInstance } from '../models/User';
 
 export async function list(ctx) {
     logger.debug('获取用户信息');
-    ctx.body = 'user';
+    ctx.body = await new UserService().getUserList();
 }
 
 export async function getUser(ctx) {

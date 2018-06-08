@@ -22,7 +22,7 @@ declare module 'koa-convert' {
 }
 
 declare module 'koa-cors' {
-    import * as Koa from "koa";
+    import * as Koa from 'koa';
 
     function cors(options?: object): Koa.Middleware;
     namespace cors { }

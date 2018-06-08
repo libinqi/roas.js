@@ -1,45 +1,64 @@
 import { logger } from '../../middleware/log';
 import { sequelize, models } from '../models';
+import { Transaction } from 'sequelize';
 import { UserAttributes, UserInstance } from '../models/User';
 
 export class UserService {
-    transaction;
+    transaction: Transaction;
 
-    constructor(transaction?) {
+    constructor(transaction?: Transaction) {
         this.transaction = transaction || null;
     }
 
-    createUser(user: UserAttributes): Promise<UserAttributes> {
-        return new Promise<UserAttributes>((resolve: Function, reject: Function) => {
-            return models.User.create(user, {
+    async createUser(user: UserAttributes): Promise<UserAttributes> {
+        try {
+            let createdUser: UserAttributes = await models.User.create(user, {
                 raw: true,
                 transaction: this.transaction
-            }).then((user: UserAttributes) => {
-                logger.info(`创建用户成功： ${user.name}.`);
-                resolve(user);
-            }).catch((error: Error) => {
-                logger.error(error.message);
-                reject(error);
             });
-        });
+
+            if (createdUser) {
+                logger.info(`创建用户成功： ${createdUser.name}.`);
+            }
+
+            return createdUser;
+        } catch (error) {
+            logger.error(error.message);
+            throw error;
+        }
     }
 
-    getUser(id: number): Promise<UserAttributes> {
-        return new Promise<UserAttributes>((resolve: Function, reject: Function) => {
-            return models.User.findById(id, {
+    async getUserList(): Promise<UserAttributes[]> {
+        try {
+            let userList: UserAttributes[] = await models.User.findAll({
                 transaction: this.transaction,
                 raw: true
-            }).then((user: UserAttributes) => {
-                if (user) {
-                    logger.info(`获取到用户：${user.name}.`);
-                } else {
-                    logger.info(`用户Id不存在：${id}.`);
-                }
-                resolve(user);
-            }).catch((error: Error) => {
-                logger.error(error.message);
-                reject(error);
             });
-        });
+
+            return userList;
+        } catch (error) {
+            logger.error(error.message);
+            throw error;
+        }
+    }
+
+    async getUser(id: number): Promise<UserAttributes> {
+        try {
+            let user: UserAttributes = await models.User.findById(id, {
+                transaction: this.transaction,
+                raw: true
+            });
+
+            if (user) {
+                logger.info(`获取到用户：${user.name}.`);
+            } else {
+                logger.info(`用户Id不存在：${id}.`);
+            }
+
+            return user;
+        } catch (error) {
+            logger.error(error.message);
+            throw error;
+        }
     }
 }

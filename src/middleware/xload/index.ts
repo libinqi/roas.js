@@ -18,7 +18,7 @@ export default function (app, options) {
 
   let dir = path.resolve(options.path || './data');
   return async function xload(ctx, next) {
-    if (ctx.download) return await next();
+    if (ctx.download) { return await next(); }
 
     let req = ctx.req;
     let res = ctx.res;
@@ -59,4 +59,4 @@ export default function (app, options) {
 
     await next();
   };
-};
+}

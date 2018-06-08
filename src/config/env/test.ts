@@ -1,10 +1,10 @@
-const http_port = Number.parseInt(process.env.PORT) || 3330;
-const tcp_port = Number.parseInt(process.env.TCPPORT) || 8333;
-const ws_port = Number.parseInt(process.env.WSPORT) || 3331;
+const httpPort = Number.parseInt(process.env.PORT) || 3330;
+const tcpPort = Number.parseInt(process.env.TCPPORT) || 8333;
+const wsPort = Number.parseInt(process.env.WSPORT) || 3331;
 
 export default {
   http: {
-    port: http_port,
+    port: httpPort,
     hostName: '',
     assetHost: '',
     serveStatic: true,
@@ -13,12 +13,12 @@ export default {
     // provider: 'User'
   },
   ws: {
-    wsPort: ws_port,
+    wsPort: wsPort,
     isEnable: true
   },
   tcp: {
-    port: tcp_port,
+    port: tcpPort,
     isEnable: true,
     provider: 'User'
   }
-}
+};

@@ -20,7 +20,7 @@ export default function (req, config) {
     }
 
     form.parse(req, (err, fields, files) => {
-      cbk(err, fields, files, resolve)
+      cbk(err, fields, files, resolve);
     });
 
     // 用户请求被取消
@@ -79,11 +79,11 @@ export default function (req, config) {
       let fileName = files[item].name;
       let hashName = getUniqueId(0, hashContent, fileName);
 
-      let fileItem = getFileItem(files[item], uploadDir)
+      let fileItem = getFileItem(files[item], uploadDir);
       hashContent[hashName] = fileItem;
       result.push(Object.assign(fileItem, {
         filename: hashName
-      }))
+      }));
     }
 
     try {
@@ -106,7 +106,7 @@ export default function (req, config) {
       type: fileItem.type,
       mtime: fileItem.mtime,
       filename: fileItem.filename
-    }
+    };
   }
 
   function getUniqueId(start, hashContent, fileName) {
