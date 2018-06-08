@@ -1,0 +1,7 @@
+--reporter spec
+--colors
+--recursive
+--require ./node_modules/ts-node/register
+--timeout 80000
+--watch-extensions ts
+test/**/*.ts

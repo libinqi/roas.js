@@ -1,0 +1,88 @@
+{
+  "name": "roas.js",
+  "version": "3.0.0",
+  "description": "A Web App like Ruby on Rails with Koa2, ES6 and Sequelize",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon -e ts -r ts-node/register src/app.ts",
+    "test": "./node_modules/.bin/mocha test/bootstrap.test.ts test/**/*.test.ts  --opts test/mocha.opts",
+    "build": "rd/s/q dist & tsc",
+    "pm2": "pm2 start process.json --env production",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "db:migrate": "./node_modules/.bin/sequelize db:migrate",
+    "db:rollback": "./node_modules/.bin/sequelize db:migrate:undo",
+    "create:migration": "./node_modules/.bin/sequelize migration:create"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libinqi/roas.js.git"
+  },
+  "keywords": [
+    "koa2",
+    "typescript",
+    "sequelize"
+  ],
+  "author": "libinqi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/libinqi/roas.js.git/issues"
+  },
+  "engines": {
+    "node": ">= 8.6.0"
+  },
+  "homepage": "https://github.com/libinqi/roas.js.git#readme",
+  "dependencies": {
+    "co": "^4.6.0",
+    "debug": "^3.1.0",
+    "formidable": "^1.2.1",
+    "koa": "^2.5.1",
+    "koa-bodyparser": "^4.2.1",
+    "koa-convert": "^1.2.0",
+    "koa-cors": "0.0.16",
+    "koa-json": "^2.0.2",
+    "koa-jwt": "^3.3.2",
+    "koa-multer": "^1.0.2",
+    "koa-router": "^7.4.0",
+    "koa-socket.io": "^1.1.2",
+    "koa-static": "^4.0.3",
+    "lodash": "^4.17.10",
+    "log4js": "^2.8.0",
+    "moment": "^2.22.2",
+    "multer": "^1.3.0",
+    "mysql2": "^1.5.3",
+    "node-cache": "^4.2.0",
+    "request": "^2.87.0",
+    "roas-mount": "^1.0.3",
+    "roas-restql": "^1.0.7",
+    "sequelize": "^4.37.10"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.3",
+    "@types/koa": "^2.0.46",
+    "@types/koa-bodyparser": "^4.2.0",
+    "@types/koa-json": "^2.0.18",
+    "@types/koa-jwt": "^3.3.0",
+    "@types/koa-router": "^7.0.28",
+    "@types/mocha": "^5.2.1",
+    "@types/node": "^10.3.1",
+    "@types/sequelize": "^4.27.20",
+    "chai": "^4.1.2",
+    "cross-env": "^5.1.6",
+    "mocha": "^4.1.0",
+    "nodemon": "^1.17.5",
+    "sequelize-cli": "^3.2.0",
+    "should": "^13.2.1",
+    "skipper-disk": "^0.5.11",
+    "supertest": "^3.1.0",
+    "ts-node": "^6.1.0",
+    "tslint": "^5.10.0",
+    "typescript": "^2.9.1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "public/*",
+      "logs/*"
+    ]
+  }
+}
