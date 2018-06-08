@@ -1,9 +1,0 @@
-/node_modules
-/*.log
-/logs/*.log
-/.idea
-/build
-/*-compiled.js
-/*-compiled.js.map
-*-compiled.js
-*-compiled.js.map
