@@ -7,4 +7,4 @@ const isTest = process.env.NODE_ENV === 'test';
 
 export const appPath = process.cwd();
 export const config = isTest ? test : (isProd ? production : development);
-export const env = process.env.NODE_ENV;
+export const env = process.env.NODE_ENV || 'development';

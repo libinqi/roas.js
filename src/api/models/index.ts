@@ -1,36 +1,32 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as  Sequelize from 'sequelize';
-import { env } from '../../config/config';
-import database from '../../config/database';
+import * as appConfig from '../../config/config';
+import * as database from '../../config/database';
 import Debug from 'debug';
 
 const debug = Debug('sequelize');
-const config = database[env];
+const config = database[appConfig.env];
 const db: any = {};
 
 let _models;
 let _sequelize;
 
-if (config.use_env_variable) {
-    _sequelize = new Sequelize(process.env[config.use_env_variable]);
-} else {
-    _sequelize = new Sequelize(config.database, config.username, config.password, Object.assign({}, config, {
-        logging: env === 'development' ? true : false,
+_sequelize = new Sequelize(config.database, config.username, config.password, Object.assign({}, config, {
+    logging: appConfig.env === 'development' ? true : false,
+    underscored: true,
+    underscoredAll: true,
+    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED,
+    define: {
+        paranoid: true,
         underscored: true,
-        underscoredAll: true,
-        isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED,
-        define: {
-            paranoid: true,
-            underscored: true,
-            freezeTableName: true,
-            schemaDelimiter: '_',
-            createdAt: 'createdAt',
-            updatedAt: 'updatedAt',
-            deletedAt: 'deletedAt'
-        },
-    }));
-}
+        freezeTableName: true,
+        schemaDelimiter: '_',
+        createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
+        deletedAt: 'deletedAt'
+    },
+}));
 
 const loadModels = (modelsPath, schema) => {
     fs.readdirSync(modelsPath).forEach(filename => {
