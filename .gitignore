@@ -3,7 +3,9 @@
 /logs/*.log
 /.idea
 /build
+/dist
 /*-compiled.js
 /*-compiled.js.map
 *-compiled.js
 *-compiled.js.map
+package-lock.json

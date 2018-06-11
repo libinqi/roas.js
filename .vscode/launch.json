@@ -2,22 +2,31 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "roas调试",
+            "name": "roas",
             "type": "node",
             "request": "launch",
-            "args": ["${workspaceRoot}/src/app.ts"],
-            "runtimeArgs": ["-r", "ts-node/register"],
+            "args": [
+                "${workspaceRoot}/src/app.ts"
+            ],
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
             "console": "integratedTerminal",
             "internalConsoleOptions": "openOnSessionStart"
         },
         {
-            "name": "roas test调试",
+            "name": "roas test",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
-            "args": ["-r", "ts-node/register", "${relativeFile}"],
+            "args": [
+                "test/bootstrap.test.ts",
+                "--opts",
+                "test/mocha.opts"
+            ],
             "cwd": "${workspaceRoot}",
             "protocol": "inspector",
             "console": "integratedTerminal",
