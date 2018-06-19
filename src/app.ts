@@ -62,7 +62,7 @@ if (process.argv[2] && process.argv[2][0] === 'c') {
 	});
 } else {
 	(async () => {
-		const connection = await sequelize.sync();
+		const connection = await sequelize.sync({force: false});
 		if (connection) {
 			console.log('Connected to the database');
 

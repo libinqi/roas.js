@@ -40,6 +40,7 @@ export default () => {
             await next();
         } catch (err) {
             error(err);
+            throw err;
         }
     };
     return logMiddle;

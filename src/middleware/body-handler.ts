@@ -1,9 +1,15 @@
+import * as Koa from 'koa';
+
 export default function (callback) {
-    return async (ctx, next) => {
+    return async (ctx: Koa.Context, next: Function) => {
         try {
             await next();
 
-            if (404 === ctx.status) { ctx.throw(404, '请求的路径或资源不存在'); }
+            if (404 === ctx.status) {
+                ctx.status = 404;
+                ctx.body = '请求的路径或资源不存在';
+                return true;
+            }
 
             let data = null;
 

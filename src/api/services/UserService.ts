@@ -1,10 +1,13 @@
 import { logger } from '../../middleware/log';
-import { sequelize, models } from '../models';
 import { Transaction } from 'sequelize';
-import { UserAttributes, UserInstance } from '../models/User';
+import { UserAttributes } from '../models/User';
+import { UserRepository, UserContext } from '../repositories';
 
 export class UserService {
     transaction: Transaction;
+
+    @UserRepository()
+    private userRepository: UserContext;
 
     constructor(transaction?: Transaction) {
         this.transaction = transaction || null;
@@ -12,10 +15,7 @@ export class UserService {
 
     async createUser(user: UserAttributes): Promise<UserAttributes> {
         try {
-            let createdUser: UserAttributes = await models.User.create(user, {
-                raw: true,
-                transaction: this.transaction
-            });
+            let createdUser: UserAttributes = await this.userRepository.create(user);
 
             if (createdUser) {
                 logger.info(`创建用户成功： ${createdUser.name}.`);
@@ -30,10 +30,7 @@ export class UserService {
 
     async getUserList(): Promise<UserAttributes[]> {
         try {
-            let userList: UserAttributes[] = await models.User.findAll({
-                transaction: this.transaction,
-                raw: true
-            });
+            let userList: UserAttributes[] = await this.userRepository.find();
 
             return userList;
         } catch (error) {
@@ -42,12 +39,20 @@ export class UserService {
         }
     }
 
+    async getUserCount(): Promise<number> {
+        try {
+            let count: number = await this.userRepository.count();
+
+            return count;
+        } catch (error) {
+            logger.error(error.message);
+            throw error;
+        }
+    }
+
     async getUser(id: number): Promise<UserAttributes> {
         try {
-            let user: UserAttributes = await models.User.findById(id, {
-                transaction: this.transaction,
-                raw: true
-            });
+            let user: UserAttributes = await this.userRepository.findOne({ id });
 
             if (user) {
                 logger.info(`获取到用户：${user.name}.`);

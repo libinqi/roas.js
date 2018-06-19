@@ -33,7 +33,6 @@
   },
   "homepage": "https://github.com/libinqi/roas.js.git#readme",
   "dependencies": {
-    "co": "^4.6.0",
     "debug": "^3.1.0",
     "formidable": "^1.2.1",
     "koa": "^2.5.1",
@@ -70,6 +69,7 @@
     "@types/supertest": "^2.0.4",
     "chai": "^4.1.2",
     "cross-env": "^5.1.6",
+    "js-beautify": "^1.7.5",
     "mocha": "^4.1.0",
     "nodemon": "^1.17.5",
     "sequelize-cli": "^3.2.0",

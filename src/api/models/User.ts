@@ -12,7 +12,7 @@ export interface UserInstance extends Instance<UserAttributes> {
 }
 
 export default function (sequelize: Sequelize.Sequelize, dataTypes: DataTypes) {
-    const user = sequelize.define('User', {
+    return sequelize.define('User', {
         id: { type: dataTypes.INTEGER, autoIncrement: true, primaryKey: true },
         name: { type: dataTypes.STRING(100), allowNull: false, defaultValue: '' },
         nickname: { type: dataTypes.STRING(100), allowNull: false, defaultValue: '' }
@@ -23,5 +23,4 @@ export default function (sequelize: Sequelize.Sequelize, dataTypes: DataTypes) {
                 }
             }
         });
-    return user;
 }
