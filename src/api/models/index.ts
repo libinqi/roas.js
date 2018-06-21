@@ -36,7 +36,7 @@ const loadModels = (modelsPath, schema) => {
             validNameRegex = /^(.+)\.(js|ts|json)/,
             isValidFile = validNameRegex.test(filename) || isDirectory;
 
-        // keep .js, .json or directory
+        // keep .js, .ts, .json or directory
         if (!isValidFile || filename === path.basename(module.filename)) { return; }
 
         // load model recursively
@@ -45,10 +45,6 @@ const loadModels = (modelsPath, schema) => {
         } else {
             let model = require(modelPath),
                 name = filename.match(validNameRegex)[1];
-
-            // if ('function' !== typeof attributes) {
-            //     throw new Error(`实体${name}'的attributes没有找到`);
-            // }
 
             if (!_sequelize.isDefined(name)) {
                 if (model.attributes && 'function' === typeof model.attributes) {
