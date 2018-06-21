@@ -1,3 +1,3 @@
-export * from './base/DbContext';
-export * from './base/Repository';
+export * from './utils/DbContext';
+export * from './utils/Repository';
 export * from './UserRepository';

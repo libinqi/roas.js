@@ -1,21 +1,21 @@
 import { logger } from '../../middleware/log';
 import { Transaction } from 'sequelize';
-import { UserAttributes } from '../models/User';
-import { UserRepository, UserContext } from '../repositories';
+import { User } from '../models/User';
+import { Repository, UserRepository } from '../repositories';
 
 export class UserService {
     transaction: Transaction;
 
-    @UserRepository()
-    private userRepository: UserContext;
+    @Repository()
+    private userRepository: UserRepository;
 
     constructor(transaction?: Transaction) {
         this.transaction = transaction || null;
     }
 
-    async createUser(user: UserAttributes): Promise<UserAttributes> {
+    async createUser(user: User): Promise<User> {
         try {
-            let createdUser: UserAttributes = await this.userRepository.create(user);
+            let createdUser: User = await this.userRepository.create(user);
 
             if (createdUser) {
                 logger.info(`创建用户成功： ${createdUser.name}.`);
@@ -28,9 +28,9 @@ export class UserService {
         }
     }
 
-    async getUserList(): Promise<UserAttributes[]> {
+    async getUserList(): Promise<User[]> {
         try {
-            let userList: UserAttributes[] = await this.userRepository.find();
+            let userList: User[] = await this.userRepository.find();
 
             return userList;
         } catch (error) {
@@ -50,9 +50,9 @@ export class UserService {
         }
     }
 
-    async getUser(id: number): Promise<UserAttributes> {
+    async getUser(id: number): Promise<User> {
         try {
-            let user: UserAttributes = await this.userRepository.findOne({ id });
+            let user: User = await this.userRepository.findOne({ id });
 
             if (user) {
                 logger.info(`获取到用户：${user.name}.`);

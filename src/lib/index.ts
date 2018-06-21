@@ -1,6 +1,8 @@
 import * as path from 'path';
 import * as mount from 'roas-mount';
-import Router from './router';
+import * as Koa from 'koa';
+import * as KoaRouter from 'koa-router';
+import { router } from './router';
 import { config } from '../config/config';
 
 let provider = config.http.provider || '';
@@ -13,8 +15,24 @@ global['$controllers'] = mount(path.join(__dirname, '../', 'api/controllers', pr
 
 /*
  *加载路由
- * param:dir(路由文件目录,默认路径为当前项目src/api/routes)
+ * 控制器动态注册路由
  */
-global['$routes'] = mount(path.join(__dirname, '../', 'api/routes', provider));
+const koaRouter = new KoaRouter();
 
-export default Router;
+export default function (ctx?: Koa.Context) {
+    const routes = router.getRouter();
+    Object.keys(routes).forEach((url) => {
+        routes[url].forEach((object) => {
+            if (ctx && object.httpMethod === 'ws') {
+                const instance = new object.constructor(ctx);
+                ctx.socket.on((object.constructor.url || '') + url, instance[object.handler]);
+            } else if (object.httpMethod !== 'ws') {
+                koaRouter[object.httpMethod]((object.constructor.url || '') + url, async (ctx: Koa.BaseContext) => {
+                    const instance = new object.constructor(ctx);
+                    await instance[object.handler]();
+                });
+            }
+        });
+    });
+    return koaRouter;
+}

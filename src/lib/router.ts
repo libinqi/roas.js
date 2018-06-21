@@ -1,50 +1,71 @@
-import * as Koa from 'koa';
-import * as Router from 'koa-router';
+import { logger } from '../middleware/log';
 
-const router = new Router();
+interface RouterAction {
+    httpMethod: string;
+    constructor: any;
+    handler: string;
+}
 
-export default function (ctx?: Koa.Context) {
-    let path, params, controller, action;
+interface RouterActionArray {
+    [key: string]: Array<{
+        httpMethod: string,
+        constructor: any,
+        handler: string
+    }>;
+}
 
-    for (let mapping in global['$routes']) {
-        for (let url in global['$routes'][mapping]) {
-            path = url.substr(url.indexOf('/'), url.length - 1);
-            params = global['$routes'][mapping][url].split('.');
-            // 获取控制器与函数
-            if (params && params.length === 2) {
-                controller = global['$controllers'][params[0]];
-                if (controller && controller[params[1]]) {
-                    action = controller[params[1]];
-                } else {
-                    action = null;
+interface Decorator {
+    (target: any, propertyKey?: string): void;
+}
+
+export enum HttpMethod {
+    GET = 'get',
+    POST = 'post',
+    PATCH = 'patch',
+    DELETE = 'delete',
+    OPTIONS = 'options',
+    PUT = 'put',
+    WS = 'ws',
+}
+
+class Router {
+    router: RouterActionArray = {};
+    setRouter(url: string, routerAction: RouterAction) {
+        const _router = this.router[url];
+        if (_router) {
+            //检查http method 是否冲突
+            for (const index in _router) {
+                const object = _router[index];
+                if (object.httpMethod === routerAction.httpMethod) {
+                    logger.error(`路由地址 ${object.httpMethod} ${url} 已经存在`);
+                    return;
                 }
-            } else {
-                console.log(`Route parameter pattern is not available：${url}`);
             }
-
-            if (!action) {
-                console.log(`Route for controller is not found： ${url}`);
-                continue;
-            }
-
-            if (url.startsWith('GET ') || url.startsWith('get ')) {
-                router.get(path, action);
-            } else if (url.startsWith('POST ') || url.startsWith('post ')) {
-                router.post(path, action);
-            } else if (url.startsWith('PUT ') || url.startsWith('put ')) {
-                router.put(path, action);
-            } else if (url.startsWith('DELETE ') || url.startsWith('delete ')) {
-                router.delete(path, action);
-            } else if (url.startsWith('WS') || url.startsWith('ws')) {
-                path = url.replace('WS ', '').replace('ws ', '');
-                if (ctx) {
-                    ctx.socket.on(path, action);
-                }
-            } else {
-                console.log(`Don't support routing：${url}`);
-            }
+            //不冲突则注册
+            this.router[url].push(routerAction);
+        } else {
+            this.router[url] = [];
+            this.router[url].push(routerAction);
         }
     }
 
-    return router;
+    getRouter() {
+        return this.router;
+    }
+}
+
+export const router: Router = <any>new Router();
+
+export function route(url: string, httpMethod?: HttpMethod): Decorator {
+    return (target: any, propertyKey?: string) => {
+        if (typeof target === 'function') {
+            target['url'] = url;
+        } else if (propertyKey) {
+            router.setRouter(url, {
+                httpMethod: httpMethod || HttpMethod.GET,
+                constructor: target.constructor,
+                handler: propertyKey
+            });
+        }
+    };
 }

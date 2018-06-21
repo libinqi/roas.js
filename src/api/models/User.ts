@@ -1,14 +1,14 @@
 import * as Sequelize from 'sequelize';
 import { Instance, DataTypes } from 'sequelize';
 
-export interface UserAttributes {
+export interface User {
     id: number;
     name: string;
     nickname?: string;
 }
 
-export interface UserInstance extends Instance<UserAttributes> {
-    dataValues: UserAttributes;
+export interface UserInstance extends Instance<User> {
+    dataValues: User;
 }
 
 export default function (sequelize: Sequelize.Sequelize, dataTypes: DataTypes) {

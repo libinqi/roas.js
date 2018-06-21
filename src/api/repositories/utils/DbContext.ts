@@ -90,7 +90,7 @@ export class DbContext {
 
     async find(where?: object, options?: object): Promise<any[]> {
         try {
-            options = options || { transaction: this.transaction, raw: true };
+            options = options || { raw: true };
             let data: any[] = await this.model.findAll({ where: where || {} }, options);
             return data;
         } catch (error) {
@@ -101,7 +101,6 @@ export class DbContext {
     async findById(id: number): Promise<any> {
         try {
             let data: any = await this.model.findById(id, {
-                transaction: this.transaction,
                 raw: true
             });
             return data;
@@ -112,7 +111,7 @@ export class DbContext {
 
     async findOne(where: object, options?: object): Promise<any> {
         try {
-            options = options || { transaction: this.transaction, raw: true };
+            options = options || { raw: true };
             let data: any = await this.model.findOne({ where: where }, options);
             return data;
         } catch (error) {
