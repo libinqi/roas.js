@@ -36,7 +36,7 @@ class Router {
             //检查http method 是否冲突
             for (const index in _router) {
                 const object = _router[index];
-                if (object.httpMethod === routerAction.httpMethod) {
+                if (((object.constructor.url || '') + url === url) && object.httpMethod === routerAction.httpMethod) {
                     logger.error(`路由地址 ${object.httpMethod} ${url} 已经存在`);
                     return;
                 }
