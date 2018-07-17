@@ -7,15 +7,15 @@
 import { Transaction } from 'sequelize';
 
 export class DbContext {
-    model;
-    transaction: Transaction;
+    private model;
+    private transaction: Transaction;
 
     constructor(model: any, transaction?: Transaction) {
         this.model = model;
         this.transaction = transaction || null;
     }
 
-    async create(obj: object): Promise<any> {
+    protected async create(obj: object): Promise<any> {
         try {
             let created: any = await this.model.create(obj, {
                 raw: true,
@@ -31,7 +31,7 @@ export class DbContext {
         }
     }
 
-    async bulkCreate(array: any[]): Promise<any[]> {
+    protected async bulkCreate(array: any[]): Promise<any[]> {
         try {
             let data: any[] = await this.model.bulkCreate(array, {
                 raw: true,
@@ -49,7 +49,7 @@ export class DbContext {
         }
     }
 
-    async delete(criteria: any, force: boolean = false) {
+    protected async delete(criteria: any, force: boolean = false) {
         try {
             if (typeof criteria === 'object') {
                 await this.model.destroy({
@@ -70,7 +70,7 @@ export class DbContext {
         }
     }
 
-    async update(obj: any, criteria?: object) {
+    protected async update(obj: any, criteria?: object) {
         try {
             let options = { where: {}, transaction: this.transaction };
             if (!criteria) {
@@ -88,17 +88,17 @@ export class DbContext {
         }
     }
 
-    async find(where?: object, options?: object): Promise<any[]> {
+    protected async find(where?: object, options?: object): Promise<any[]> {
         try {
             options = options || { raw: true };
-            let data: any[] = await this.model.findAll({ where: where || {} }, options);
+            let data: any[] = await this.model.findAll(Object.assign({}, options, { where: where || {} }));
             return data;
         } catch (error) {
             throw error;
         }
     }
 
-    async findById(id: number): Promise<any> {
+    protected async findById(id: number): Promise<any> {
         try {
             let data: any = await this.model.findById(id, {
                 raw: true
@@ -109,21 +109,39 @@ export class DbContext {
         }
     }
 
-    async findOne(where: object, options?: object): Promise<any> {
+    protected async findOne(where: object, options?: object): Promise<any> {
         try {
             options = options || { raw: true };
-            let data: any = await this.model.findOne({ where: where }, options);
+            let data: any = await this.model.findOne(Object.assign({}, options, { where: where || {} }));
             return data;
         } catch (error) {
             throw error;
         }
     }
 
-    async findAndCountAll(where?: object, offset?: number, limit?: number) {
+    protected async findMax(col?: string, where?: object) {
+        try {
+            let data: any = await this.model.findOne({ where: where || {}, order: [[col || 'id', 'DESC']], raw: true });
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    protected async findMin(col?: string, where?: object) {
+        try {
+            let data: any = await this.model.findOne({ where: where || {}, order: [[col || 'id', 'ASC']], raw: true });
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    protected async findAndCountAll(where?: object, limit?: number, offset?: number) {
         try {
             let data: any = await this.model.findAndCountAll({
                 where: where || {},
-                offset: offset,
+                offset: offset || 0,
                 limit: limit
             });
             return data;
@@ -132,7 +150,34 @@ export class DbContext {
         }
     }
 
-    async count(where?: object) {
+    protected async max(col?: string, where?: object) {
+        try {
+            let data: any = await this.model.max(col || 'id', { where: where || {} });
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    protected async min(col?: string, where?: object) {
+        try {
+            let data: any = await this.model.min(col || 'id', { where: where || {} });
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    protected async sum(col?: string, where?: object) {
+        try {
+            let data: any = await this.model.sum(col || 'id', { where: where || {} });
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    protected async count(where?: object) {
         try {
             let count: number = await this.model.count({ where: where || {} });
             return count;

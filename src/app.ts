@@ -45,7 +45,10 @@ app.use(bodyHandlerMiddle((err, ctx) => {
 app.use(logMiddle());
 app.use(cacheMiddle());
 app.use(json());
-app.use(bodyparser());
+app.use(bodyparser({
+    formLimit: '100mb',
+    jsonLimit: '100mb'
+}));
 app.use(cors());
 // app.use(koajwt({secret: config.http.secretKeyBase}).unless({path:[/^\/getToken/]}));
 app.use(router().routes()).use(router().allowedMethods());
