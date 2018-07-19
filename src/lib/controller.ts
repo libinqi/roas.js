@@ -1,8 +1,8 @@
-import { BaseContext } from 'koa';
+import { Context } from 'koa';
 
 export class Controller {
-    ctx: BaseContext;
-    constructor(ctx: BaseContext) {
+    ctx: Context;
+    constructor(ctx: Context) {
         this.ctx = ctx;
     }
 }
