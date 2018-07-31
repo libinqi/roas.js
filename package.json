@@ -1,13 +1,13 @@
 {
   "name": "roas.js",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "A Web App like Ruby on Rails with Koa2, ES6 and Sequelize",
   "private": true,
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon -e ts -r ts-node/register src/app.ts",
     "test": "./node_modules/.bin/mocha test/bootstrap.test.ts  --opts test/mocha.opts",
-    "build": "rd/s/q dist & tsc",
+    "build": "rd/s/q dist & tsc -p ./src/tsconfig.json & copyfiles -f ./src/public/*.* ./dist/public & copyfiles package.json process.json pm2_publish.bat pm2_publish.sh ./dist",
     "pm2": "pm2 start process.json --env production",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "db:migrate": "./node_modules/.bin/sequelize db:migrate",
@@ -69,6 +69,7 @@
     "@types/sequelize": "^4.27.20",
     "@types/supertest": "^2.0.4",
     "chai": "^4.1.2",
+    "copyfiles": "^2.0.0",
     "cross-env": "^5.1.6",
     "js-beautify": "^1.7.5",
     "mocha": "^4.1.0",
