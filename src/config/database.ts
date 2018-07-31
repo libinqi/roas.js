@@ -1,38 +1,50 @@
 export const development = {
-    username: process.env.DATABASE_USERNAME_DEV || 'root',
-    password: process.env.DATABASE_PASSWORD_DEV || '123456',
-    database: process.env.DATABASE_NAME_DEV || 'roas_dev',
-    host: process.env.DATABASE_HOST_DEV || 'localhost',
+    username: process.env.DATABASE_USERNAME || 'root',
+    password: process.env.DATABASE_PASSWORD || '123456',
+    database: process.env.DATABASE_NAME || 'roas_dev',
+    host: process.env.DATABASE_HOST || 'localhost',
     dialect: 'mysql',
+    dialectOptions: {
+        requestTimeout: 30000
+    },
     pool: {
-        max: 5,
+        max: 100,
         min: 0,
-        idle: 10000
-    }
+        idle: 30000
+    },
+    timezone: '+08:00'
 };
 
 export const test = {
-    username: process.env.DATABASE_USERNAME_TEST || 'root',
-    password: process.env.DATABASE_PASSWORD_TEST || '123456',
-    database: process.env.DATABASE_NAME_TEST || 'roas_test',
-    host: process.env.DATABASE_HOST_TEST || 'localhost',
+    username: process.env.DATABASE_USERNAME || 'root',
+    password: process.env.DATABASE_PASSWORD || '123456',
+    database: process.env.DATABASE_NAME || 'roas_test',
+    host: process.env.DATABASE_HOST || 'localhost',
     dialect: 'mysql',
+    dialectOptions: {
+        requestTimeout: 30000
+    },
     pool: {
-        max: 5,
+        max: 100,
         min: 0,
-        idle: 10000
-    }
+        idle: 30000
+    },
+    timezone: '+08:00'
 };
 
 export const production = {
-    username: process.env.DATABASE_USERNAME_PRO || 'root',
-    password: process.env.DATABASE_PASSWORD_PRO || '123456',
-    database: process.env.DATABASE_NAME_PRO || 'roas',
-    host: process.env.DATABASE_HOST_PRO || 'localhost',
+    username: process.env.DATABASE_USERNAME || 'root',
+    password: process.env.DATABASE_PASSWORD || '123456',
+    database: process.env.DATABASE_NAME || 'roas',
+    host: process.env.DATABASE_HOST || 'localhost',
     dialect: 'mysql',
+    dialectOptions: {
+        requestTimeout: 30000
+    },
     pool: {
-        max: 10,
-        min: 5,
+        max: 100,
+        min: 0,
         idle: 30000
-    }
+    },
+    timezone: '+08:00'
 };
