@@ -13,9 +13,9 @@ export class UserService {
         this.transaction = transaction || null;
     }
 
-    async createUser(user: User): Promise<User> {
+    async addUser(user: User): Promise<User> {
         try {
-            let createdUser: User = await this.userRepository.create(user);
+            let createdUser: User = await this.userRepository.createUser(user);
 
             if (createdUser) {
                 logger.info(`创建用户成功： ${createdUser.name}.`);
@@ -30,7 +30,7 @@ export class UserService {
 
     async getUserList(): Promise<User[]> {
         try {
-            let userList: User[] = await this.userRepository.find();
+            let userList: User[] = await this.userRepository.findUserList();
 
             return userList;
         } catch (error) {
@@ -41,7 +41,7 @@ export class UserService {
 
     async getUserCount(): Promise<number> {
         try {
-            let count: number = await this.userRepository.count();
+            let count: number = await this.userRepository.findUserCount();
 
             return count;
         } catch (error) {
@@ -52,7 +52,7 @@ export class UserService {
 
     async getUser(id: number): Promise<User> {
         try {
-            let user: User = await this.userRepository.findOne({ id });
+            let user: User = await this.userRepository.findUser(id);
 
             if (user) {
                 logger.info(`获取到用户：${user.name}.`);

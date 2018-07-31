@@ -3,7 +3,7 @@ import * as convert from 'koa-convert';
 import * as json from 'koa-json';
 import * as bodyparser from 'koa-bodyparser';
 import {
-    config
+    appPath, config
 } from './config/config';
 import {
     sequelize
@@ -28,10 +28,10 @@ const io = new IO({
 app.keys = [config.http.secretKeyBase];
 // not serve static when deploy
 if (config.http.serveStatic) {
-    app.use(convert(require('koa-static')(path.join(process.cwd(), '/public'))));
+    app.use(convert(require('koa-static')(path.join(appPath, '/public'))));
 }
 app.use(xload(app, {
-    path: path.join(process.cwd(), '/public/assets/images/avatar')
+    path: path.join(appPath, '/public/assets/images/avatar')
     , upload: {
         encoding: 'utf-8'
         , maxFieldsSize: 2 * 1024 * 1024

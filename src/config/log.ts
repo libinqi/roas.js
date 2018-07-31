@@ -1,7 +1,7 @@
 import * as path from 'path';
-import { config, env } from './config';
+import { appPath, env } from './config';
 
-const logPath = path.join(process.cwd(), '/logs'); //配置目标路径 logs
+const logPath = path.join(appPath, '/logs'); //配置目标路径 logs
 
 export default {
     appenders: {
@@ -29,4 +29,4 @@ export default {
             level: env === 'development' ? 'debug' : 'error'
         }
     }
-}
+};

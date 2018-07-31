@@ -25,10 +25,10 @@ export const test = {
 };
 
 export const production = {
-    username: process.env.DATABASE_USERNAME_PRO,
-    password: process.env.DATABASE_PASSWORD_PRO,
-    database: process.env.DATABASE_NAME_PRO,
-    host: process.env.DATABASE_HOST_PRO,
+    username: process.env.DATABASE_USERNAME_PRO || 'root',
+    password: process.env.DATABASE_PASSWORD_PRO || '123456',
+    database: process.env.DATABASE_NAME_PRO || 'roas',
+    host: process.env.DATABASE_HOST_PRO || 'localhost',
     dialect: 'mysql',
     pool: {
         max: 10,
