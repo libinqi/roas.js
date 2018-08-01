@@ -28,5 +28,6 @@ export default {
             appenders: env === 'development' ? ['out', 'debug'] : ['error'],
             level: env === 'development' ? 'debug' : 'error'
         }
-    }
+    },
+    pm2: true
 };
