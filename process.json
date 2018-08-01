@@ -4,7 +4,8 @@
     "script": "app.js",
     "node_args": "--harmony",
     "exec_mode": "cluster",
-    "instances": "max",
+    "instances": "0",
+    "instance_var": "INSTANCE_ID",
     "watch": false,
     "log_date_format": "YYYY-MM-DD HH:mm:ss",
     "env": {

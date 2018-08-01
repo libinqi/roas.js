@@ -29,5 +29,6 @@ export default {
             level: env === 'development' ? 'debug' : 'error'
         }
     },
-    pm2: true
+    pm2: true,
+    pm2InstanceVar: 'INSTANCE_ID'
 };
