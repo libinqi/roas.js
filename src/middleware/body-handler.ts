@@ -3,11 +3,29 @@ import * as Koa from 'koa';
 export default function (callback) {
     return async (ctx: Koa.Context, next: Function) => {
         try {
-            await next();
+            if (ctx.method === 'POST' && ctx.is('text/xml')) {
+                let promise = new Promise((resolve, reject) => {
+                    let buf = '';
+                    ctx.req.setEncoding('utf8');
+                    ctx.req.on('data', (chunk) => {
+                        buf += chunk;
+                    });
+                    ctx.req.on('end', () => {
+                        resolve(buf);
+                    });
+                });
 
-            if (404 === ctx.status) {
-                ctx.status = 404;
-                ctx.body = '请求的路径或资源不存在';
+                await promise.then(async (result) => {
+                    ctx.request.body = result;
+                    await next();
+                }).catch((e) => {
+                    e.status = 400;
+                });
+            } else {
+                await next();
+            }
+
+            if (ctx.type === 'text/html') {
                 return true;
             }
 
@@ -19,16 +37,20 @@ export default function (callback) {
                 } catch (err) {
                     data = ctx.body;
                 }
+
+                ctx.body = {
+                    data: data,
+                    error: {
+                        code: 0,
+                        message: 'success'
+                    }
+                };
+                ctx.status = 200;
+            } else if (404 === ctx.status) {
+                ctx.status = 404;
+                ctx.body = '请求的路径或资源不存在';
             }
 
-            ctx.body = {
-                data: data,
-                error: {
-                    code: 0,
-                    message: 'success'
-                }
-            };
-            ctx.status = 200;
             return true;
         } catch (err) {
             ctx.body = {

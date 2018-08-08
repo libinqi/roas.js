@@ -56,12 +56,16 @@ class Router {
 
 export const router: Router = <any>new Router();
 
-export function route(url: string, httpMethod?: HttpMethod): Decorator {
+export function route(url?: string, httpMethod?: HttpMethod): Decorator {
     return (target: any, propertyKey?: string) => {
         if (typeof target === 'function') {
+            if (!url) {
+                url = target.name.replace('Controller', '');
+                url = '/' + url[0].toLowerCase() + url.substring(1, url.length);
+            }
             target['url'] = url;
         } else if (propertyKey) {
-            router.setRouter(url, {
+            router.setRouter(url || ('/' + (propertyKey[0].toLowerCase() + propertyKey.substring(1, propertyKey.length))), {
                 httpMethod: httpMethod || HttpMethod.GET,
                 constructor: target.constructor,
                 handler: propertyKey

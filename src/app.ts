@@ -2,6 +2,7 @@ import * as Koa from 'koa';
 import * as convert from 'koa-convert';
 import * as json from 'koa-json';
 import * as bodyparser from 'koa-bodyparser';
+import * as views from 'koa-views';
 import {
     appPath, config
 } from './config/config';
@@ -30,6 +31,9 @@ app.keys = [config.http.secretKeyBase];
 if (config.http.serveStatic) {
     app.use(convert(require('koa-static')(path.join(appPath, '/public'))));
 }
+app.use(views(path.join(appPath, '/public', 'views'), {
+    map: { html: 'swig' }
+}));
 app.use(xload(app, {
     path: path.join(appPath, '/public/assets/images/avatar')
     , upload: {
