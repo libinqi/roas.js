@@ -4,10 +4,10 @@
  * Created by libinqi on 2018/06/14.
  * 
  */
-import { Transaction } from 'sequelize';
+import { Transaction, Model, AnyWhereOptions } from 'sequelize';
 
 export class DbContext {
-    private model;
+    private model: Model<any, any>;
     private transaction: Transaction;
 
     constructor(model: any, transaction?: Transaction) {
@@ -34,7 +34,6 @@ export class DbContext {
     protected async bulkCreate(array: any[]): Promise<any[]> {
         try {
             let data: any[] = await this.model.bulkCreate(array, {
-                raw: true,
                 transaction: this.transaction
             });
             let createdModels = [];
@@ -150,7 +149,7 @@ export class DbContext {
         }
     }
 
-    protected async max(col?: string, where?: object) {
+    protected async max(col?: string, where?: AnyWhereOptions) {
         try {
             let data: any = await this.model.max(col || 'id', { where: where || {} });
             return data;
@@ -159,7 +158,7 @@ export class DbContext {
         }
     }
 
-    protected async min(col?: string, where?: object) {
+    protected async min(col?: string, where?: AnyWhereOptions) {
         try {
             let data: any = await this.model.min(col || 'id', { where: where || {} });
             return data;
@@ -168,7 +167,7 @@ export class DbContext {
         }
     }
 
-    protected async sum(col?: string, where?: object) {
+    protected async sum(col?: string, where?: AnyWhereOptions) {
         try {
             let data: any = await this.model.sum(col || 'id', { where: where || {} });
             return data;
@@ -177,7 +176,7 @@ export class DbContext {
         }
     }
 
-    protected async count(where?: object) {
+    protected async count(where?: AnyWhereOptions) {
         try {
             let count: number = await this.model.count({ where: where || {} });
             return count;
