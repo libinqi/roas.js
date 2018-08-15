@@ -19,7 +19,7 @@ export default function (sequelize: Sequelize.Sequelize, dataTypes: DataTypes) {
     }, {
             indexes: [{ name: 'user_name_unique', fields: ['name'], unique: true }],
             classMethods: {
-                associate: (models) => {
+                associate: (models: Sequelize.Models) => {
                 }
             }
         });

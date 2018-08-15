@@ -1,22 +1,22 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as  Sequelize from 'sequelize';
+import * as  SequelizeStatic from 'sequelize';
+import { Sequelize, Models } from 'sequelize';
 import * as appConfig from '../../config/config';
 import * as database from '../../config/database';
 import Debug from 'debug';
 
 const debug = Debug('sequelize');
 const config = database[appConfig.env];
-const db: any = {};
 
-let _models;
-let _sequelize;
+let _models: Models;
+let _sequelize: Sequelize;
 
-_sequelize = new Sequelize(config.database, config.username, config.password, Object.assign({}, config, {
+_sequelize = new SequelizeStatic(config.database, config.username, config.password, Object.assign({}, config, {
     logging: appConfig.env === 'development' ? true : false,
     underscored: true,
     underscoredAll: true,
-    isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED,
+    isolationLevel: SequelizeStatic.Transaction.ISOLATION_LEVELS.READ_COMMITTED,
     define: {
         paranoid: true,
         underscored: true,
@@ -25,7 +25,7 @@ _sequelize = new Sequelize(config.database, config.username, config.password, Ob
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         deletedAt: 'deletedAt'
-    },
+    }
 }));
 
 const loadModels = (modelsPath, schema) => {
@@ -55,7 +55,7 @@ const loadModels = (modelsPath, schema) => {
                     if (schema) {
                         options.schema = schema;
                     }
-                    _sequelize.define(name, attributes(Sequelize), options);
+                    _sequelize.define(name, attributes(SequelizeStatic), options);
                 } else {
                     _sequelize.import(modelPath);
                 }
@@ -81,7 +81,7 @@ const associateModels = () => {
 
             global[key] = model;
 
-            debug(`model: ${model.name},associations: [${Object.keys(model.associations).join()}]`);
+            debug(`model: ${model.name},associations: [${Object.keys((<any>model).associations).join()}]`);
         }
     });
 };
