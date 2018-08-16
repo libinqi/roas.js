@@ -18,7 +18,6 @@ export class DbContext {
     protected async create(obj: object): Promise<any> {
         try {
             let created: any = await this.model.create(obj, {
-                raw: true,
                 transaction: this.transaction
             });
             if (created && created.dataValues) {
@@ -37,9 +36,11 @@ export class DbContext {
                 transaction: this.transaction
             });
             let createdModels = [];
-            if (data && data.length > 0) {
+            if (data && data.length) {
                 for (let model of data) {
-                    createdModels.push(model.dataValues);
+                    if (model.dataValues) {
+                        createdModels.push(model.dataValues);
+                    }
                 }
             }
             return createdModels;
@@ -89,8 +90,11 @@ export class DbContext {
 
     protected async find(where?: object, options?: object): Promise<any[]> {
         try {
-            options = options || { raw: true };
+            options = options || {};
             let data: any[] = await this.model.findAll(Object.assign({}, options, { where: where || {} }));
+            if (data && data.length && data[0].dataValues) {
+                return data.map((value) => { return value.dataValues; });
+            }
             return data;
         } catch (error) {
             throw error;
@@ -99,9 +103,10 @@ export class DbContext {
 
     protected async findById(id: number): Promise<any> {
         try {
-            let data: any = await this.model.findById(id, {
-                raw: true
-            });
+            let data: any = await this.model.findById(id);
+            if (data && data.dataValues) {
+                return data.dataValues;
+            }
             return data;
         } catch (error) {
             throw error;
@@ -110,8 +115,11 @@ export class DbContext {
 
     protected async findOne(where: object, options?: object): Promise<any> {
         try {
-            options = options || { raw: true };
+            options = options || {};
             let data: any = await this.model.findOne(Object.assign({}, options, { where: where || {} }));
+            if (data && data.dataValues) {
+                return data.dataValues;
+            }
             return data;
         } catch (error) {
             throw error;
