@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as  SequelizeStatic from 'sequelize';
-import { Sequelize, Models } from 'sequelize';
+import { Sequelize, Models, Transaction } from 'sequelize';
 import * as appConfig from '../../config/config';
 import * as database from '../../config/database';
 import Debug from 'debug';
@@ -102,3 +102,6 @@ dynamicLoadModels(__dirname, '');
 
 export const sequelize = _sequelize;
 export const models = _models;
+export const db = {
+    transaction: null
+};

@@ -1,16 +1,12 @@
 import { logger } from '../../middleware/log';
-import { Transaction } from 'sequelize';
 import { User } from '../models/User';
 import { Repository, UserRepository } from '../repositories';
 
 export class UserService {
-    transaction: Transaction;
-
     @Repository()
     private userRepository: UserRepository;
 
-    constructor(transaction?: Transaction) {
-        this.transaction = transaction || null;
+    constructor() {
     }
 
     async addUser(user: User): Promise<User> {

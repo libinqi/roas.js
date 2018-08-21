@@ -5,6 +5,7 @@
  * 
  */
 import { Transaction, Model, AnyWhereOptions } from 'sequelize';
+import { db } from '../../models';
 
 export class DbContext {
     private model: Model<any, any>;
@@ -12,13 +13,13 @@ export class DbContext {
 
     constructor(model: any, transaction?: Transaction) {
         this.model = model;
-        this.transaction = transaction || null;
+        this.transaction = transaction;
     }
 
     protected async create(obj: object): Promise<any> {
         try {
             let created: any = await this.model.create(obj, {
-                transaction: this.transaction
+                transaction: this.transaction || db.transaction
             });
             if (created && created.dataValues) {
                 return created.dataValues;
@@ -33,7 +34,7 @@ export class DbContext {
     protected async bulkCreate(array: any[]): Promise<any[]> {
         try {
             let data: any[] = await this.model.bulkCreate(array, {
-                transaction: this.transaction
+                transaction: this.transaction || db.transaction
             });
             let createdModels = [];
             if (data && data.length) {
@@ -55,7 +56,7 @@ export class DbContext {
                 await this.model.destroy({
                     where: criteria,
                     force: force,
-                    transaction: this.transaction
+                    transaction: this.transaction || db.transaction
                 });
             } else if (typeof criteria === 'number') {
                 await this.model.destroy({
@@ -72,7 +73,7 @@ export class DbContext {
 
     protected async update(obj: any, criteria?: object) {
         try {
-            let options = { where: {}, transaction: this.transaction };
+            let options = { where: {}, transaction: this.transaction || db.transaction };
             if (!criteria) {
                 if (!obj.id) {
                     throw '对象的id为空,无法更新';
