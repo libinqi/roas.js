@@ -25,6 +25,9 @@ _sequelize = new SequelizeStatic(config.database, config.username, config.passwo
         createdAt: 'createdAt',
         updatedAt: 'updatedAt',
         deletedAt: 'deletedAt'
+    },
+    sync: {
+        force: false
     }
 }));
 
@@ -80,6 +83,12 @@ const associateModels = () => {
             }
 
             global[key] = model;
+
+            if (!_sequelize.options.sync.force) {
+                model.sync = (options) => {
+                    return null;
+                };
+            }
 
             debug(`model: ${model.name},associations: [${Object.keys((<any>model).associations).join()}]`);
         }
