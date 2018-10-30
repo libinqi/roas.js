@@ -6,6 +6,7 @@
  */
 import { Transaction, Model, AnyWhereOptions } from 'sequelize';
 import { db } from '../../models';
+import * as RawFilter from './RawFilter';
 
 export class DbContext {
     private model: Model<any, any>;
@@ -21,11 +22,7 @@ export class DbContext {
             let created: any = await this.model.create(obj, {
                 transaction: this.transaction || db.transaction
             });
-            if (created && created.dataValues) {
-                return created.dataValues;
-            } else {
-                return null;
-            }
+            return RawFilter.toJsonData(created);
         } catch (error) {
             throw error;
         }
@@ -36,15 +33,7 @@ export class DbContext {
             let data: any[] = await this.model.bulkCreate(array, {
                 transaction: this.transaction || db.transaction
             });
-            let createdModels = [];
-            if (data && data.length) {
-                for (let model of data) {
-                    if (model.dataValues) {
-                        createdModels.push(model.dataValues);
-                    }
-                }
-            }
-            return createdModels;
+            return RawFilter.toJsonData(data);
         } catch (error) {
             throw error;
         }
@@ -93,10 +82,7 @@ export class DbContext {
         try {
             options = options || {};
             let data: any[] = await this.model.findAll(Object.assign({}, options, { where: where || {} }));
-            if (data && data.length && data[0].dataValues) {
-                return data.map((value) => { return value.dataValues; });
-            }
-            return data;
+            return RawFilter.toJsonData(data);
         } catch (error) {
             throw error;
         }
@@ -105,10 +91,7 @@ export class DbContext {
     protected async findById(id: number): Promise<any> {
         try {
             let data: any = await this.model.findById(id);
-            if (data && data.dataValues) {
-                return data.dataValues;
-            }
-            return data;
+            return RawFilter.toJsonData(data);
         } catch (error) {
             throw error;
         }
@@ -118,10 +101,7 @@ export class DbContext {
         try {
             options = options || {};
             let data: any = await this.model.findOne(Object.assign({}, options, { where: where || {} }));
-            if (data && data.dataValues) {
-                return data.dataValues;
-            }
-            return data;
+            return RawFilter.toJsonData(data);
         } catch (error) {
             throw error;
         }
@@ -129,8 +109,8 @@ export class DbContext {
 
     protected async findMax(col?: string, where?: object) {
         try {
-            let data: any = await this.model.findOne({ where: where || {}, order: [[col || 'id', 'DESC']], raw: true });
-            return data;
+            let data: any = await this.model.findOne({ where: where || {}, order: [[col || 'id', 'DESC']] });
+            return RawFilter.toJsonData(data);
         } catch (error) {
             throw error;
         }
@@ -138,8 +118,8 @@ export class DbContext {
 
     protected async findMin(col?: string, where?: object) {
         try {
-            let data: any = await this.model.findOne({ where: where || {}, order: [[col || 'id', 'ASC']], raw: true });
-            return data;
+            let data: any = await this.model.findOne({ where: where || {}, order: [[col || 'id', 'ASC']] });
+            return RawFilter.toJsonData(data);
         } catch (error) {
             throw error;
         }
