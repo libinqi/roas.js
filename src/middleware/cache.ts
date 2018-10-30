@@ -7,7 +7,7 @@ const expire = middleOptions.expire || config.http.maxCache;
 
 const nodeCache = new Cache({ stdTTL: expire, checkperiod: 120 });
 
-const setCache = (key, value, cacheOptions) => {
+const setCache = (key: string, value: any, cacheOptions?: any) => {
     if (value == null) {
         return;
     }
@@ -17,7 +17,7 @@ const setCache = (key, value, cacheOptions) => {
     nodeCache.set(key, value, tty);
 };
 
-const getCache = (key) => {
+const getCache = (key: string) => {
     key = prefix + key;
     let data = nodeCache.get(key);
     if (data && data !== undefined) {
@@ -26,7 +26,7 @@ const getCache = (key) => {
     return null;
 };
 
-const deleteCache = (key) => {
+const deleteCache = (key: string) => {
     key = prefix + key;
     return nodeCache.del(key);
 };
