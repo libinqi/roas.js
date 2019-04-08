@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import * as moment from 'moment';
 import * as  SequelizeStatic from 'sequelize';
 import { Sequelize, Models, Transaction } from 'sequelize';
 import * as appConfig from '../../config/config';
@@ -111,6 +112,66 @@ dynamicLoadModels(__dirname, '');
 
 export const sequelize = _sequelize;
 export const models = _models;
+
+let createdTime;
 export const db = {
-    transaction: null
+    transaction: null,
+    createTransaction: async (isolationLevel: SequelizeStatic.TransactionIsolationLevel, autocommit: boolean = false) => {
+        createdTime = new Date();
+        return await sequelize.transaction({
+            autocommit,
+            isolationLevel
+        });
+    },
+    beginTransaction: async (timeout: number = 60000) => {
+        if (!db.transaction) {
+            db.transaction = await db.createTransaction(sequelize.Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED, true);
+            return db.transaction;
+        } else {
+            if (db.transaction && db.transaction.finished === 'commit') {
+                db.transaction = await db.createTransaction(sequelize.Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED, true);
+                return db.transaction;
+            } else {
+                while (moment(new Date()).diff(createdTime) <= timeout) {
+                    return await db.beginTransaction();
+                }
+
+                while (moment(new Date()).diff(createdTime) > timeout) {
+                    try {
+                        if (db.transaction && db.transaction.finished !== 'commit') {
+                            await db.transaction.commit();
+                        }
+                        db.transaction = await db.createTransaction(sequelize.Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED, true);
+                        return db.transaction;
+                    } catch (error) {
+                        if (db.transaction && db.transaction.rollback) {
+                            await db.transaction.rollback();
+                        }
+                    }
+                }
+            }
+        }
+    },
+    commitTransaction: async () => {
+        if (db.transaction && db.transaction.finished !== 'commit') {
+            await db.transaction.commit();
+        }
+    },
+    rollbackTransaction: async () => {
+        if (db.transaction && db.transaction.rollback && db.transaction.finished !== 'commit') {
+            await db.transaction.rollback();
+        }
+    },
+    closeTransaction: async () => {
+        try {
+            if (db.transaction && db.transaction.finished !== 'commit') {
+                await db.transaction.commit();
+            }
+        } catch (error) {
+            if (db.transaction && db.transaction.rollback) {
+                await db.transaction.rollback();
+            }
+        }
+        db.transaction = null;
+    }
 };
