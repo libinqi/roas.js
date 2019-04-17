@@ -140,12 +140,14 @@ export const db = {
                     try {
                         if (db.transaction && db.transaction.finished !== 'commit') {
                             await db.transaction.commit();
+                            db.transaction = null;
                         }
                         db.transaction = await db.createTransaction(sequelize.Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED, true);
                         return db.transaction;
                     } catch (error) {
                         if (db.transaction && db.transaction.rollback) {
                             await db.transaction.rollback();
+                            db.transaction = null;
                         }
                     }
                 }
@@ -155,11 +157,13 @@ export const db = {
     commitTransaction: async () => {
         if (db.transaction && db.transaction.finished !== 'commit') {
             await db.transaction.commit();
+            db.transaction = null;
         }
     },
     rollbackTransaction: async () => {
         if (db.transaction && db.transaction.rollback && db.transaction.finished !== 'commit') {
             await db.transaction.rollback();
+            db.transaction = null;
         }
     },
     closeTransaction: async () => {
