@@ -15,25 +15,31 @@ export function Transaction(isolationLevel?: SequelizeStatic.TransactionIsolatio
             let loadTransactionRepository = (service: any) => {
                 for (let r in service) {
                     if (service[r] instanceof DbContext) {
-                        service[r].transaction = transaction;
+                        let c = Reflect.getMetadata('design:type', service, r);
+                        service[r] = new c(transaction);
                     }
                 }
             };
 
             let loadTransactionService = (obj: any) => {
                 for (let s in obj) {
-                    if (obj[s] instanceof Object && Reflect.getMetadata('custom:metaData', target, s) === 'service') {
+                    if (obj[s] instanceof Object && Reflect.getMetadata('custom:metaData', obj, s) === 'service') {
+                        let c = Reflect.getMetadata('design:type', obj, s);
+                        obj[s] = new c(transaction);
+
                         loadTransactionRepository(obj[s]);
                         loadTransactionService(obj[s]);
                     }
                 }
             };
 
-            loadTransactionRepository(target);
-            loadTransactionService(target);
+            let c = new target.constructor();
+
+            loadTransactionRepository(c);
+            loadTransactionService(c);
 
             try {
-                let result = await originalMethod.apply(target, args);
+                let result = await originalMethod.apply(c, args);
                 await transaction.commit();
                 return result;
             } catch (error) {

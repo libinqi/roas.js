@@ -51,7 +51,7 @@ export class DbContext {
                 await this.model.destroy({
                     where: { id: criteria },
                     force: force,
-                    transaction: this.transaction
+                    transaction: this.transaction || db.transaction
                 });
             }
             return true;
